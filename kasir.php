@@ -20,10 +20,10 @@ if (!isset($_SESSION['kodeBayar'])) {
 
 <form id="infoTransaksi" method="POST" action="prosesKasir.php">
     <label for="kodeBayar">Kode Bayar: </label>
-    <input type="text" name="kodeBayar" id="kodeBayar" value="<?php echo $_SESSION['kodeBayar']; ?>" readonly><br>
+    <input type="text" name="kodeBayar" id="kodeBayar" value="<?php echo isset($_SESSION['kodeBayar']) ? $_SESSION['kodeBayar']: ''; ?>" readonly><br>
 
     <label for="waktu">Waktu: </label>
-    <input type="text" name="waktu" id="waktu" value="<?php echo $_SESSION['waktu']; ?>" readonly><br>
+    <input type="text" name="waktu" id="waktu" value="<?php echo isset($_SESSION['waktu']) ? $_SESSION['waktu']: ''; ?>" readonly><br>
 
     <label for="kasir">Kasir:</label>
     <input type="text" name="kasir" id="kasir" required value="<?php echo isset($_POST['kasir']) ? $_POST['kasir'] : ''; ?>"><br><br>
@@ -37,9 +37,9 @@ if (!isset($_SESSION['kodeBayar'])) {
     <label for="qty">Quantity:</label>
     <input type="number" name="qty" id="qty" required min="1">
 
-    <input type="hidden" name="kodeBayar" id="hiddenKodeBayar">
-    <input type="hidden" name="waktu" id="hiddenWaktu">
-    <input type="hidden" name="kasir" id="hiddenKasir">
+    <input type="hidden" name="kodeBayar" id="hiddenKodeBayar" value="<?php echo $_SESSION['kodeBayar']; ?>">
+    <input type="hidden" name="waktu" id="hiddenWaktu" value="<?php echo $_SESSION['waktu']; ?>">
+    <input type="hidden" name="kasir" id="hiddenKasir" value="<?php echo $_SESSION['kasir']; ?>">
 
     <button type="submit" name="tambah">Tambah ke Keranjang</button>
 </form>
@@ -51,6 +51,7 @@ if (!isset($_SESSION['kodeBayar'])) {
     document.getElementById('hiddenKodeBayar').value = document.querySelector('[name="kodeBayar"]').value;
     document.getElementById('hiddenWaktu').value = document.querySelector('[name="waktu"]').value;
     document.getElementById('hiddenKasir').value = document.querySelector('[name="kasir"]').value;
+    
 
     document.getElementById('kirim').submit();
      });

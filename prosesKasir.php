@@ -6,8 +6,12 @@ include 'koneksi.php';
 if(isset($_POST['kodeBayar'],$_POST['waktu'], $_POST['kasir'])){
     $kodeBayar =$_POST['kodeBayar'];
     $waktu = $_POST['waktu'];
-    $kasir = $_POST['kasir'];
-    
+    $kasir = $_POST['kasir'];    
+
+    $_SESSION['kodeBayar'] = $kodeBayar;
+    $_SESSION['waktu'] = $waktu;
+    $_SESSION['kasir'] = $kasir;
+
 }
 
 if (isset($_POST['tambah'])) {

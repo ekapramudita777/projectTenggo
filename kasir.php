@@ -3,47 +3,58 @@ session_start();
 
 date_default_timezone_set('Asia/Jakarta');
 
-$input_data = array(
-    'kodeBayar' => isset($_POST['kodeBayar']) ? $_POST['kodeBayar'] : '',
-    'waktu' => isset($_POST['waktu']) ? $_POST['waktu'] : '',
-    'kasir' => isset($_POST['kasir']) ? $_POST['kasir'] : '',
-);
+$tanggal = date('Ymd');
+$jam_menit_detik = date('His');
+$random = rand(100,999);
+$kodeBayar = "TRX-".$tanggal."-".$jam_menit_detik."-".$random;
+$waktu = date('d-m-Y H:i');
 
-
-if (empty($input_data['kodeBayar'])) {
+if (!isset($_SESSION['kodeBayar'])) {
     $tanggal = date('Ymd');
     $jam_menit_detik = date('His');
-    $random = rand(100, 999);
-    $input_data['kodeBayar'] = "TRX-" . $tanggal . "-" . $jam_menit_detik . "-" . $random;
-    $input_data['waktu'] = date('d-m-Y H:i');
-}
-
-if (!empty($input_data['kasir'])) {
-    $_SESSION['kasir'] = $input_data['kasir'];
+    $random = rand(100,999);
+    $_SESSION['kodeBayar'] = "TRX-".$tanggal."-".$jam_menit_detik."-".$random;
+    $_SESSION['waktu']= date('Y-m-d');
 }
 ?>
 
-<form acation="" method="POST">
-    <label for  = "kodeBayar">Kode Bayar: </label>
-    <input type ="text" name="kodeBayar" id="kodeBayar" value=<?php echo $input_data['kodeBayar'];?>><br>
-    <label for  = "waktu">Waktu: </label>
-    <input type ="text" name="waktu" id="waktu" value=<?php $input_data['waktu']; ?>><br>
+<form id="infoTransaksi" method="POST" action="prosesKasir.php">
+    <label for="kodeBayar">Kode Bayar: </label>
+    <input type="text" name="kodeBayar" id="kodeBayar" value="<?php echo $_SESSION['kodeBayar']; ?>" readonly><br>
+
+    <label for="waktu">Waktu: </label>
+    <input type="text" name="waktu" id="waktu" value="<?php echo $_SESSION['waktu']; ?>" readonly><br>
+
     <label for="kasir">Kasir:</label>
-    <input type="text" name="kasir" id="kasir" required value=<?php echo isset($input_data['kasir']) ? $input_data['kasir'] : '';?>><br><br>
+    <input type="text" name="kasir" id="kasir" required value="<?php echo isset($_POST['kasir']) ? $_POST['kasir'] : ''; ?>"><br><br>
 </form>
 
 
-<form action="prosesKasir.php" method="POST">
+
+<form id="kirim"action="prosesKasir.php" method="POST">
     <label for="kodeBarang">Kode Barang:</label>
     <input type="text" name="kodeBarang" id="kodeBarang" required>
     <label for="qty">Quantity:</label>
     <input type="number" name="qty" id="qty" required min="1">
-    <button type="submit" name="tambah">Tambah ke Keranjang</button>
 
-    <input type="hidden" name="kodeTransaksi" value="<?php echo $input_data['kodeBayar']; ?>">
-    <input type="hidden" name="waktu" value="<?php echo $input_data['waktu'];?>">
-    <input type="hidden" name="kasir" value="<?php echo $input_data['kasir'];?>">
+    <input type="hidden" name="kodeBayar" id="hiddenKodeBayar">
+    <input type="hidden" name="waktu" id="hiddenWaktu">
+    <input type="hidden" name="kasir" id="hiddenKasir">
+
+    <button type="submit" name="tambah">Tambah ke Keranjang</button>
 </form>
+
+<script>
+     document.getElementById('kasir').addEventListener('input', function() {
+
+
+    document.getElementById('hiddenKodeBayar').value = document.querySelector('[name="kodeBayar"]').value;
+    document.getElementById('hiddenWaktu').value = document.querySelector('[name="waktu"]').value;
+    document.getElementById('hiddenKasir').value = document.querySelector('[name="kasir"]').value;
+
+    document.getElementById('kirim').submit();
+     });
+</script>
 
 <h2>KERANJANG</h2>
 <table>
